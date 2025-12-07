@@ -18,6 +18,7 @@
     <string-array name="work_mode">
         <item>V2(FROZEN)</item>
         <item>V2(UID)</item>
+        <item>V1(FROZEN)</item>
         <item>全局SIGSTOP</item>
     </string-array>
 

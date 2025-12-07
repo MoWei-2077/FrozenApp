@@ -3,7 +3,7 @@
     <array name="recommend_package">
         <item>android</item>
         <item>com.miui.powerkeeper</item>
-        <item>io.github.jark006.freezeit</item>
+        <item>io.github.MoWei.Frozen</item>
     </array>
 
     <string-array name="level">
@@ -23,6 +23,7 @@
     <string-array name="work_mode">
         <item>V2(FROZEN)</item>
         <item>V2(UID)</item>
+        <item>V1(FROZEN)</item>
         <item>Global SIGSTOP</item>
     </string-array>
 

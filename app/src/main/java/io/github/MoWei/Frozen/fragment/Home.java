@@ -1,0 +1,324 @@
+package io.github.MoWei.Frozen.fragment;
+
+import android.annotation.SuppressLint;
+import android.app.ActivityManager;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuProvider;
+import androidx.fragment.app.Fragment;
+
+import java.nio.ByteBuffer;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import io.github.MoWei.Frozen.BuildConfig;
+import io.github.MoWei.Frozen.ManagerCmd;
+import io.github.MoWei.Frozen.R;
+import io.github.MoWei.Frozen.StaticData;
+import io.github.MoWei.Frozen.Utils;
+import io.github.MoWei.Frozen.activity.About;
+import io.github.MoWei.Frozen.activity.AppTime;
+import io.github.MoWei.Frozen.activity.Settings;
+import io.github.MoWei.Frozen.databinding.FragmentHomeBinding;
+
+public class Home extends Fragment implements View.OnClickListener {
+    private final static String TAG = "HomeFragment";
+    private FragmentHomeBinding binding;
+
+    Timer timer;
+    ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+
+    final int realTimeInfoIntLen = 23;
+    int[] realTimeInfo = new int[realTimeInfoIntLen]; //ARM64和X64  Native层均为小端
+    byte[] realTimeRequest = new byte[12];
+    int realTimeResponseLen = 0;
+
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
+        binding = FragmentHomeBinding.inflate(inflater, container, false);
+
+        binding.realtimeLayout.setOnClickListener(this);
+
+        requireActivity().addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menu.clear();
+                menuInflater.inflate(R.menu.home_menu, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                int id = menuItem.getItemId();
+                if (id == R.id.settings) {
+                    if (StaticData.hasGetPropInfo)
+                        startActivity(new Intent(requireContext(), Settings.class));
+                    else
+                        Toast.makeText(requireContext(), getString(R.string.freezeit_offline), Toast.LENGTH_LONG).show();
+                } else if (id == R.id.about) {
+                    startActivity(new Intent(requireContext(), About.class));
+                }
+                return true;
+            }
+        }, this.getViewLifecycleOwner());
+
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            StaticData.hasGetPropInfo = false;
+            StaticData.hasOnlineInfo = false;
+            StaticData.onlineChangelog = "";
+            refreshStatus();
+        });
+
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refreshStatus();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    final int HAS_MODULE_INFO = 1,
+            NO_MODULE_INFO = 2,
+            HANDLE_REALTIME_INFO = 5;
+
+    void refreshStatus() {
+        if (StaticData.hasGetPropInfo) handler.sendEmptyMessage(HAS_MODULE_INFO);
+        else new Thread(() -> {
+            var recvLen = Utils.freezeitTask(ManagerCmd.getPropInfo, null);
+
+            // info [0]:moduleID [1]:moduleName [2]:moduleVersion [3]:moduleVersionCode [4]:moduleAuthor
+            //      [5]:clusterNum: CPU丛集数
+            //      [6]:moduleEnv:  Magisk or KernelSU
+            //      [7]:workMode:   冻结模式 V1 / V2
+            //      [8]:androidVer: 安卓版本
+            //      [9]:kernelVer:  内核版本
+            //      [10]:extMemory: 内存扩展 MiB
+            String[] info = (recvLen == 0) ? null : new String(StaticData.response, 0, recvLen).split("\n");
+            if (info == null || info.length < 5) {
+                handler.sendEmptyMessage(NO_MODULE_INFO);
+                return;
+            }
+
+            try {
+                StaticData.moduleVersionCode = Integer.parseInt(info[3]);
+                StaticData.clusterType = info.length > 5 ? Integer.parseInt(info[5]) : 0;
+                StaticData.extMemory = info.length > 10 ? Integer.parseInt(info[10]) : 0;
+            } catch (Exception ignored) {
+            }
+            StaticData.moduleVersion = info[2];
+            StaticData.moduleEnv = info.length > 6 ? info[6] : "Unknown";
+            StaticData.workMode = info.length > 7 ? info[7] : "Unknown";
+            StaticData.androidVer = info.length > 8 ? info[8] : "Unknown";
+            StaticData.kernelVer = info.length > 9 ? info[9] : "Unknown";
+            StaticData.hasGetPropInfo = true;
+            handler.sendEmptyMessage(HAS_MODULE_INFO);
+        }).start();
+    }
+
+    void initRealTimeInfoTimer() {
+        if (timer != null || StaticData.imgHeight == 0 || StaticData.imgWidth == 0)
+            return;
+
+        Utils.Int2Byte(StaticData.imgHeight, realTimeRequest, 0);
+        Utils.Int2Byte(StaticData.imgWidth, realTimeRequest, 4);
+
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                StaticData.am.getMemoryInfo(memoryInfo); // 底层 /proc/meminfo 的 MemAvailable 不可靠
+                Utils.Int2Byte((int) (memoryInfo.availMem >> 20), realTimeRequest, 8); //Unit: MiB
+
+                realTimeResponseLen = Utils.freezeitTask(ManagerCmd.getRealTimeInfo, realTimeRequest);
+                if (realTimeResponseLen > 0)
+                    handler.sendEmptyMessage(HANDLE_REALTIME_INFO);
+            }
+        }, 0, 3000);
+    }
+
+    private final Handler handler = new Handler(Looper.getMainLooper()) {
+        @SuppressLint({"SetTextI18n", "DefaultLocale"})
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            if (binding == null)
+                return;
+
+            // 状态机
+            switch (msg.what) {
+                case NO_MODULE_INFO: {
+                    binding.swipeRefreshLayout.setRefreshing(false);
+                    binding.stateLayout.setBackgroundResource(R.color.warn_red);
+                    binding.statusText.setText(R.string.freezeit_error_tips);
+                    binding.realtimeLayout.setVisibility(View.GONE);
+                    binding.freezeitLogo.setVisibility(View.GONE);
+                    binding.versionCard.setVisibility(View.GONE);
+
+                }
+                break;
+
+
+                case HAS_MODULE_INFO: {
+                    binding.swipeRefreshLayout.setRefreshing(false);
+                    binding.freezeitLogo.setVisibility(View.VISIBLE);
+                    binding.realtimeLayout.setVisibility(View.VISIBLE);
+                    binding.versionCard.setVisibility(View.VISIBLE);
+
+                    boolean xposedState = isXposedActive();
+                    binding.stateLayout.setBackgroundResource(xposedState ? R.color.normal_green : R.color.warn_orange);
+                    binding.statusText.setText(xposedState ? StaticData.workMode : "Xposed " + getString(R.string.xposed_warn));
+
+                    binding.moduleEnv.setText(StaticData.moduleEnv);
+                    binding.moduleVer.setText(StaticData.moduleVersion + " (" + StaticData.moduleVersionCode + ")");
+                    binding.managerVer.setText(BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")");
+                    binding.androidVer.setText(StaticData.androidVer);
+                    binding.kernelVer.setText(StaticData.kernelVer);
+
+                    if (StaticData.imgWidth != 0 && StaticData.imgHeight != 0) {
+                        initRealTimeInfoTimer();
+                        return;
+                    }
+
+                    var listener = new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            int width = binding.cpuImg.getWidth() / StaticData.imgScale;
+                            int height = binding.cpuImg.getHeight() / StaticData.imgScale;
+
+                            while (width * height > 1024 * 1024) { // RGBA 最多预留 4MiB 用于绘图
+                                StaticData.imgScale++;
+                                width = binding.cpuImg.getWidth() / StaticData.imgScale;
+                                height = binding.cpuImg.getHeight() / StaticData.imgScale;
+                            }
+                            StaticData.imgWidth = width;
+                            StaticData.imgHeight = height;
+
+                            binding.cpuImg.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                            initRealTimeInfoTimer();
+                        }
+                    };
+                    binding.cpuImg.getViewTreeObserver().addOnGlobalLayoutListener(listener);
+                }
+                break;
+
+                case HANDLE_REALTIME_INFO:
+                    realTimeHandleFunc();
+                    break;
+            }
+        }
+    };
+
+
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    void realTimeHandleFunc() {
+
+        // response[0 ~ imgBuffBytes-1]CPU曲线图像数据, [imgBuffBytes ~ end]是其他实时数据
+        int imgBuffBytes = StaticData.imgWidth * StaticData.imgHeight * 4; // ARGB 每像素4字节
+        if (realTimeResponseLen <= imgBuffBytes) {
+            String errorTips = "imgWidth" + StaticData.imgWidth +
+                    " imgHeight" + StaticData.imgHeight +
+                    " response.length" + realTimeResponseLen +
+                    " imgBuffBytes" + imgBuffBytes;
+            binding.cpu.setText(errorTips);
+            return;
+        }
+
+        if (StaticData.bitmap == null || StaticData.bitmap.getHeight() != StaticData.imgHeight ||
+                StaticData.bitmap.getWidth() != StaticData.imgWidth)
+            StaticData.bitmap = Bitmap.createBitmap(StaticData.imgWidth, StaticData.imgHeight, Bitmap.Config.ARGB_8888);
+
+        StaticData.bitmap.copyPixelsFromBuffer(ByteBuffer.wrap(StaticData.response, 0, imgBuffBytes));
+        binding.cpuImg.setImageBitmap(Utils.resize(StaticData.bitmap, StaticData.imgScale));
+
+        int realTimeInfoByteLen = realTimeResponseLen - imgBuffBytes;
+        if (realTimeInfoByteLen != 4 * realTimeInfoIntLen) {
+            String errorTips = "Required bytes: " + (4 * realTimeInfoIntLen) + " Received bytes:" + realTimeInfoByteLen;
+            binding.cpu.setText(errorTips);
+            return;
+        }
+
+        // [0]全部物理内存 [1]可用内存 [2]全部虚拟内存 [3]可用虚拟内存  Unit: MiB
+        // [4-11]八个核心频率(MHz) [12-19]八个核心使用率(%)
+        // [20]CPU总使用率(%) [21]CPU温度(m℃) [22]电池功率(mW)
+        Utils.Byte2Int(StaticData.response, imgBuffBytes, realTimeInfoIntLen * 4, realTimeInfo, 0);
+
+        final double GiB = 1024.0;
+        int MemTotal = realTimeInfo[0], MemAvailable = realTimeInfo[1];
+        int SwapTotal = realTimeInfo[2], SwapFree = realTimeInfo[3];
+
+        @SuppressLint("DefaultLocale")
+        String tmp = MemTotal <= 0 ? "" : String.format(getString(R.string.physical_ram_text),
+                MemTotal / GiB, 100.0 * (MemTotal - MemAvailable) / MemTotal,
+                MemAvailable > GiB ? MemAvailable / GiB : MemAvailable,
+                MemAvailable > GiB ? "GiB" : "MiB");
+        binding.memInfo.setText(tmp);
+
+        tmp = SwapTotal <= 0 ? "" : String.format(getString(R.string.virtual_ram_text),
+                SwapTotal / GiB, 100.0 * (SwapTotal - SwapFree) / SwapTotal,
+                SwapFree > GiB ? SwapFree / GiB : SwapFree,
+                SwapFree > GiB ? "GiB" : "MiB");
+        if (StaticData.extMemory > 0)
+            tmp += "\n" + String.format(getString(R.string.ext_memory), StaticData.extMemory / 1024.0);
+        binding.zramInfo.setText(tmp);
+
+        final int percent = realTimeInfo[20];
+        final double temperature = realTimeInfo[21] / 1e3; // m℃ -> ℃
+        final int mW = realTimeInfo[22]; // mW 毫瓦
+        binding.cpu.setText(String.format(getString(R.string.cpu_format), percent, temperature));
+        binding.battery.setText(String.format("%.2f W\uD83D\uDD0B", mW / 1e3));
+
+        binding.cpu0.setText("cpu0\n" + realTimeInfo[4] + "MHz\n" + realTimeInfo[12] + "%");
+        binding.cpu1.setText("cpu1\n" + realTimeInfo[5] + "MHz\n" + realTimeInfo[13] + "%");
+        binding.cpu2.setText("cpu2\n" + realTimeInfo[6] + "MHz\n" + realTimeInfo[14] + "%");
+        binding.cpu3.setText("cpu3\n" + realTimeInfo[7] + "MHz\n" + realTimeInfo[15] + "%");
+        binding.cpu4.setText("cpu4\n" + realTimeInfo[8] + "MHz\n" + realTimeInfo[16] + "%");
+        binding.cpu5.setText("cpu5\n" + realTimeInfo[9] + "MHz\n" + realTimeInfo[17] + "%");
+        binding.cpu6.setText("cpu6\n" + realTimeInfo[10] + "MHz\n" + realTimeInfo[18] + "%");
+        binding.cpu7.setText("cpu7\n" + realTimeInfo[11] + "MHz\n" + realTimeInfo[19] + "%");
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.realtimeLayout) {
+            startActivity(new Intent(requireContext(), AppTime.class));
+        }
+    }
+
+    public boolean isXposedActive() {
+        Log.e(TAG, "isXposedActive: Hook Fail");
+        return false;
+    }
+
+}

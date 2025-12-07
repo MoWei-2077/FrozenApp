@@ -19,7 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keepclassmembernames public class io.github.jark006.freezeit.fragment.Home {
+-keepclassmembernames public class io.github.MoWei.Frozen.fragment.Home {
 public boolean isXposedActive();
 }
--keep public class io.github.jark006.freezeit.hook.Hook {}
+-keep public class io.github.MoWei.Frozen.hook.Hook {}

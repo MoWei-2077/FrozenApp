@@ -3,22 +3,17 @@
     <string name="number" translatable="false">0</string>
     <string name="todo" translatable="false">TODO</string>
     <string name="cpu_format" translatable="false">🎛️ %2d%% %.1f℃</string>
-    <string name="coolapk_link" translatable="false">http://www.coolapk.com/u/1212220</string>
+    <string name="coolapk_link" translatable="false">http://www.coolapk.com/u/24268987</string>
     <string name="qq_group_link" translatable="false">https://jq.qq.com/?_wv=1027&amp;k=ZsyKpCP8</string>
     <string name="qq_channel_link" translatable="false">https://qun.qq.com/qqweb/qunpro/share?_wv=3&amp;_wwv=128&amp;appChannel=share&amp;inviteCode=1W6opB7&amp;appChannel=share&amp;businessType=9&amp;from=246610&amp;biz=ka</string>
-    <string name="tg_link" translatable="false">tg://join?invite=sjDX1oTk31ZmYjY1</string>
-    <string name="tg_https_link" translatable="false">https://t.me/+sjDX1oTk31ZmYjY1</string>
-    <string name="tg_channel_link" translatable="false">tg://resolve?domain=freezeitRelease</string>
-    <string name="tg_channel_https_link" translatable="false">https://t.me/freezeitRelease</string>
     <string name="github_link" translatable="false">https://github.com/jark006</string>
     <string name="github_project_link" translatable="false">https://github.com/jark006/freezeitVS</string>
-    <string name="github_app_link" translatable="false">https://github.com/jark006/freezeitapp</string>
-    <string name="lanzou_link" translatable="false">https://jark006.lanzout.com/b017oz9if</string>
+
 
     <string name="privacy_content" translatable="false">
-        更新日期：2023/03/04
+        更新日期：2024/12/08
         \n\n导言
-        \n\n冻它 是一款由 JARK006 （以下简称“我们”）提供的在安卓平台实现部分墓碑机制的软件，以下协议是本软件相关的具体协议内容，如对本《隐私政策》或相关事宜有任何问题，请通过 jark006@qq.com 与我们联系。
+        \n\nFrozen 是一款由 MoWei （以下简称“我们”）提供的在安卓平台实现部分墓碑机制的软件，以下协议是本软件相关的具体协议内容，如对本《隐私政策》或相关事宜有任何问题，请通过 MoWei2077@gmail.com 与我们联系。
 
         \n\n一、 我们收集的信息
         \n\n我们仅收集用户设备上的”应用列表及相关信息“、”实时进程信息“及“设备硬件相关信息”，这些信息全部保存再设备本地，不会以任何形式上传或转移到设备外部。也不会收集任何关于个人的隐私信息。
@@ -42,32 +37,30 @@
         \n2. 如遇本政策更新，新的政策信息将内置到新版应用，跟随应用一起发布。
 
         \n\n五、 如何联系我们
-        \n\n如果您对我们的应用权限和安全策略有任何顾虑和疑惑，可随时通过邮箱 jark006@qq.com 向我们反馈以及获得帮助。
+        \n\n如果您对我们的应用权限和安全策略有任何顾虑和疑惑，可随时通过邮箱 MoWei2077@gmail.com 向我们反馈以及获得帮助。
     </string>
 
 
-    <string name="app_name">Freezeit</string>
+    <string name="app_name">Frozen</string>
     <string name="title_home">Home</string>
     <string name="title_config">Config</string>
     <string name="title_logcat">Log</string>
     <string name="icon">Icon</string>
-    <string name="coolapk_text">Coolapk @JARK006</string>
-    <string name="qq_group_text">QQ Group 781222669</string>
-    <string name="qq_channel_text">QQ Channel [冻它模块]</string>
-    <string name="tg_group_text">Telegram Group</string>
-    <string name="tg_channel_text">Telegram Channel</string>
+    <string name="coolapk_text">Coolapk @MoWei</string>
+    <string name="qq_group_text">QQ Group 697991010</string>
+    <string name="qq_channel_text">QQ Channel [Frozen模块]</string>
     <string name="update_app_label">Update Apps</string>
     <string name="get_log_fail_tips">Failed to get work log</string>
     <string name="get_changelog_fail_tips">Failed to get Changelog</string>
     <string name="about">About</string>
-    <string name="freezeit_offline">Freezeit is not installed or running</string>
+    <string name="freezeit_offline">Frozen is not installed or running</string>
     <string name="app_label">App label</string>
     <string name="update_success">Update success</string>
     <string name="update_fail">Update fail</string>
     <string name="update_start">Updating AppLabel</string>
     <string name="clear_log_text">Clear</string>
     <string name="clear_log_tips">Cleared</string>
-    <string name="xposed_description">Freezeit Auxiliary Modules</string>
+    <string name="xposed_description">Frozen Auxiliary Modules</string>
     <string name="title_activity_setting">Settings</string>
     <string name="title_activity_task_manager">APP CPU Time</string>
     <string name="freeze_timeout_title">Freeze Timeout ⓘ</string>
@@ -76,30 +69,44 @@
     <string name="freeze_mode_title">Freezer Type ⓘ</string>
     <string name="slowly_tips">Be Slowly</string>
     <string name="help">Help</string>
-    <string name="freezeit_tutorial_text">Freezeit Tutorial</string>
     <string name="xposed_warn">Xposed inactive, stop working</string>
     <string name="freezeit_error_tips">
         1. It takes 1 minute to init after first unlock, please open it again later.
-        \n2. Please check if the Freezeit module is enabled or not.
-        \n3. Please check the network permissions of Freezeit APP.
-        \n4. Check the exception log [ /sdcard/Android/freezeit_crash_log.txt ]
-        \n5. If the device has not yet installed the Freezeit(MagiskModule), please download and install it via the jump button below.
-        \n6. If the device has not yet acquired Root permission, it will not be able to use Freezeit.
+        \n2. Please check if the Frozen module is enabled or not.
+        \n3. Please check the network permissions of Frozen APP.
+        \n4. Check the exception log [ /sdcard/Android/Frozen_crash_log.txt ]
+        \n5. If the device has not yet installed the Frozen(MagiskModule), please download and install it via the jump button below.
+        \n6. If the device has not yet acquired Root permission, it will not be able to use Frozen.
     </string>
-    <string name="download">Download</string>
     <string name="second">sec</string>
     <string name="minute">min</string>
-    <string name="lanzou_password">Lanzou Password: dy6i</string>
-    <string name="donate_wechat">Donate Wechat</string>
-    <string name="donate_alipay">Donate Alipay</string>
-    <string name="github_open_source">Manager OpenSource</string>
-    <string name="github_project">Project OpenSource</string>
     <string name="doze_title">OffScreen Doze ⓘ</string>
     <string name="lmk_title">Adjust LMK Parameter ⓘ</string>
     <string name="current_title">Adjust Current ⓘ</string>
     <string name="double_cell_title">DoubleCell Battery ⓘ</string>
     <string name="battery_title">Battery Monitor ⓘ</string>
-    <string name="developer">Developer JARK006</string>
+    <string name="boot_freeze_title">Boot Freezer ⓘ</string>
+    <string name="boot_freeze_tips">Automatically suppress self-starting applications 10 seconds after booting</string>
+
+    <string name="BinderFreezer_title">Binder Freezer ⓘ</string>
+    <string name="BinderFreezer_tips">
+        By blocking Binder communication between the application and other applications, we can avoid situations such as crashes,
+        restarts, and reloads, but this may cause some applications to enter a pseudo-offline state
+    </string>
+
+    <string name="MemoryReclaim_title">Memory Reclaim ⓘ</string>
+    <string name="MemoryReclaim_tips">Compress processes through the Android process compression interface to reduce memory usage</string>
+
+    <string name="ClearBettryWhllelist_title">Clear Bettry Opt Whllelist ⓘ</string>
+    <string name="ClearBettryWhllelist_tips">By clearing the battery optimization whitelist, more apps can be included in battery optimization</string>
+
+    <string name="unFreezerTemporary_title">unFreezerTemporary ⓘ</string>
+    <string name="unFreezerTemporary_tips">
+        By capturing Binder intent, we perform temporary unfreezing to avoid application crashes,
+        reloads, and inability to proceed to the next activity
+    </string>
+
+    <string name="developer">Developer MoWei Original Developer: JARK006</string>
     <string name="physical_ram_text">[RAM] Total: %1$.2f GiB\nUse: %2$.1f%% Remain: %3$.2f %4$s</string>
     <string name="virtual_ram_text">[SWAP] Total: %1$.2f GiB\nUse: %2$.1f%% Remain: %3$.2f %4$s</string>
     <string name="ext_memory">ExtMemory: %1$.2f GiB</string>
@@ -122,12 +129,7 @@
     <string name="setup_failed">Setup failed</string>
     <string name="no_response">No response, setting failed</string>
     <string name="get_settings_fail">Setting data acquisition failure</string>
-    <string name="update_cache">Update Cache</string>
-    <string name="new_version">New Version</string>
-    <string name="beta_version">Beta Version</string>
-    <string name="online_version">Online Version</string>
-    <string name="current_version">Current Version</string>
-    <string name="online_changelog">History Changelog</string>
+
     <string name="title_activity_about">About</string>
     <string name="debug_title">Debug Log ⓘ</string>
     <string name="config_help_text">
@@ -161,21 +163,15 @@
         \nIf the extended foreground is invalid, please check and turn off other "background protection" mechanisms that may conflict.
         \nIf the "frozen foreground" error persists, turn off this.</string>
 
-    <string name="website_link">https://jark006.github.io/i/freezeit/</string>
-    <string name="tutorial_link">https://jark006.github.io/FreezeitIntroduction/</string>
-    <string name="update_json_link">https://raw.githubusercontent.com/jark006/freezeitRelease/main/update.json</string>
-    <string name="online_changelog_link">https://raw.githubusercontent.com/jark006/freezeitRelease/main/changelogFull.txt</string>
     <string name="privacy_title">Privacy</string>
     <string name="reject">Reject</string>
     <string name="accept">Accept</string>
-    <string name="thanks_title">Thanks List</string>
     <string name="unknown">Unknown</string>
     <string name="moduleEnv">Module Platform</string>
-    <string name="moduleVer">Freezeit Version</string>
+    <string name="moduleVer">Frozen Version</string>
     <string name="managerVer">Manager Version</string>
     <string name="kernel_version">Kernel Version</string>
     <string name="android_version">Android Version</string>
-    <string name="freezeit_website">Website</string>
     <string name="set_background">Setting Background</string>
     <string name="appFailTips">Failed to get the application list, please grant the relevant permission</string>
     <string name="ok" translatable="false">OK</string>
