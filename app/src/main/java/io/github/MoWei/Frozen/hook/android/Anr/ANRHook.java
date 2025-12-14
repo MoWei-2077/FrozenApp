@@ -13,6 +13,7 @@ import io.github.MoWei.Frozen.hook.XpUtils;
 
 // ANR相关Hook.
 public class ANRHook extends MethodHook {
+    final private static String TAG = "[ANR]";
     private final Config config;
 
     public ANRHook(Config config, ClassLoader classLoader) {
@@ -73,7 +74,7 @@ public class ANRHook extends MethodHook {
                     return;
                 param.setResult(null);
                 if (XpUtils.DEBUG_ANR)
-                    XpUtils.log("Frozen[AnrHook]:", "跳过 ANR:" + XpUtils.getString(app, Enum.Field.processName));
+                    XpUtils.log(TAG, "跳过 ANR:" + XpUtils.getString(app, Enum.Field.processName));
             }
         };
     }
@@ -85,6 +86,6 @@ public class ANRHook extends MethodHook {
 
     @Override
     public String successLog() {
-        return "拦截应用持续ANR";
+        return TAG + " 拦截应用持续ANR";
     }
 }

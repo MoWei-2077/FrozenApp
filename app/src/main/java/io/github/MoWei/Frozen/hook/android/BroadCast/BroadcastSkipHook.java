@@ -13,7 +13,7 @@ import io.github.MoWei.Frozen.hook.android.Utils.SystemChecker;
 
 
 public class BroadcastSkipHook extends MethodHook {
-    final static String TAG = "广播";
+    final static String TAG = "[广播]";
     Config config;
     public BroadcastSkipHook(Config config, ClassLoader classLoader) {
         super(classLoader);
@@ -73,7 +73,7 @@ public class BroadcastSkipHook extends MethodHook {
 
     @Override
     public String successLog() {
-        return "Hook广播已成功";
+        return TAG + " Hook广播已成功";
     }
     @Override
     public int getMinVersion() {

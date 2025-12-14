@@ -12,7 +12,7 @@ import io.github.MoWei.Frozen.hook.Config;
 import io.github.MoWei.Frozen.hook.XpUtils;
 public class SendMediaButtonHook {
     Config config;
-    final static private String TAG = "媒体";
+    final static private String TAG = "[媒体]";
     public SendMediaButtonHook(Config config, ClassLoader classLoader) {
         this.config = config;
 
@@ -52,7 +52,7 @@ public class SendMediaButtonHook {
                             return;
                         int uid = XposedHelpers.getIntField(record, "mOwnerUid");
                         if (XpUtils.DEBUG_AUDIO_INTENT)
-                            XpUtils.log(TAG, "音频意图 UID:" + uid);
+                            XpUtils.log(TAG, "媒体意图 UID:" + uid);
                         if (config.managedApp.contains(uid)) {
                             synchronized (Config.IntentUid) {
                                 if (!Config.IntentUid.contains(uid)) {
@@ -62,10 +62,12 @@ public class SendMediaButtonHook {
                         }
                     }
                 });
-                XpUtils.log(TAG,method.getName() + " -> 成功Hook完毕!");
+
             } catch (Throwable throwable) {
                 XpUtils.log(TAG,method.getName() + " -> Hook失败!");
             }
         }
+
+        XpUtils.log(TAG + " 监听媒体播放事件成功");
     }
 }

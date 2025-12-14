@@ -13,7 +13,7 @@ import io.github.MoWei.Frozen.hook.Config;
 
 public class BroadcastIntentHook {
     Config config;
-    final static String TAG = "广播意图";
+    final static String TAG = "[广播意图]";
     public BroadcastIntentHook(Config config, ClassLoader classLoader) {
         this.config = config;
         try {
@@ -75,7 +75,7 @@ public class BroadcastIntentHook {
                 }
             });
 
-            XpUtils.log(TAG, "监听广播意图");
+            XpUtils.log(TAG, " 监听广播意图");
         } catch (Throwable throwable) {
             XpUtils.log(TAG,  " -> 无法监听广播意图, 异常:" + throwable);
         }

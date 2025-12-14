@@ -13,7 +13,7 @@ import io.github.MoWei.Frozen.hook.XpUtils;
 
 public class AudioStateHook extends MethodHook {
     Config config;
-    final static String TAG = "音频";
+    final static String TAG = "[音频]";
 
     public AudioStateHook(Config config, ClassLoader classLoader) {
         super(classLoader);
@@ -53,6 +53,7 @@ public class AudioStateHook extends MethodHook {
 
                         int interfaceId = reflect.getPlayerInterfaceId();
 
+
                         AudioHandler.call(uid, event, interfaceId);
                     });
                 }
@@ -61,7 +62,7 @@ public class AudioStateHook extends MethodHook {
     }
     @Override
     public String successLog() {
-        return "获取音频意图成功";
+        return TAG + " 监听播放状态成功";
     }
     @Override
     public int getMinVersion() {

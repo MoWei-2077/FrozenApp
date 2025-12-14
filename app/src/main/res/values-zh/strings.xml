@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">冻它</string>
+    <string name="app_name">Frozen</string>
 
     <string name="title_home">主页</string>
     <string name="title_config">配置</string>
@@ -103,6 +103,9 @@
 
     <string name="unFreezerTemporary_title">临时解冻 ⓘ</string>
     <string name="unFreezerTemporary_tips">通过捕获Binder意图,进行临时解冻,避免应用闪退,重载,无法进入下一个Activity</string>
+
+    <string name="breakNetWork_title">全局断网 ⓘ</string>
+    <string name="breakNetWork_tips">将冻结的应用进行断网操作,节省电量</string>
 
     <string name="lmk_title">后台优化 ⓘ</string>
     <string name="lmk_tips">调整lmk参数，尽量保留更多应用后台(内存使用量会比较高)。重启生效</string>

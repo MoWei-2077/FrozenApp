@@ -147,7 +147,7 @@ public abstract class MethodHook {
         String log = successLog();
         if (log == null)
             return;
-        XpUtils.log("Frozen[Hook]:", log);
+        XpUtils.log(log);
     }
 
     /**
@@ -165,7 +165,7 @@ public abstract class MethodHook {
     public void logError(Throwable throwable) {
         if (isIgnoreError())
             return;
-        XpUtils.log("Frozen[Hook]:", throwable.getMessage());
+        XpUtils.log(throwable.getMessage());
     }
 
     /**

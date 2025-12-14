@@ -40,7 +40,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     Switch batterySwitch, currentSwitch,  doubleCellSwitch, BootFreezeSwitch, BinderFreezerSwitch,
-            MemoryReclaimSwitch, ClearBettryWhllelistSwitch, unFreezerTemporarSwitch,
+            MemoryReclaimSwitch, ClearBettryWhllelistSwitch, unFreezerTemporarSwitch, breakNetWorkSwitch,
             lmkSwitch, dozeSwitch, debugSwitch;
 
     final int freezeTimeoutIdx = 2;
@@ -57,9 +57,10 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
     final int MemoryReclaimIdx = 18;
     final int ClearBettryWhllelistIdx = 19;
     final int unFreezerTemporarIdx = 20;
+    final int breakNetWorkIdx = 21;
 
-    final int lmkIdx = 21;
-    final int dozeIdx = 22;
+    final int lmkIdx = 22;
+    final int dozeIdx = 23;
 
     final int debugIdx = 30;
 
@@ -91,6 +92,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         findViewById(R.id.ClearBettryWhllelist_title).setOnClickListener(this);
         findViewById(R.id.unFreezerTemporar_title).setOnClickListener(this);
 
+        findViewById(R.id.breakNetWork_title).setOnClickListener(this);
         findViewById(R.id.lmk_title).setOnClickListener(this);
         findViewById(R.id.doze_title).setOnClickListener(this);
         findViewById(R.id.debug_title).setOnClickListener(this);
@@ -115,6 +117,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
         MemoryReclaimSwitch = findViewById(R.id.switch_MemoryReclaim);
         ClearBettryWhllelistSwitch = findViewById(R.id.switch_ClearBettryWhllelist);
         unFreezerTemporarSwitch = findViewById(R.id.switch_unFreezerTemporar);
+        breakNetWorkSwitch = findViewById(R.id.switch_breakNetWork);
 
         lmkSwitch = findViewById(R.id.switch_lmk);
         dozeSwitch = findViewById(R.id.switch_doze);
@@ -303,7 +306,7 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
                     InitSwitch(MemoryReclaimSwitch, MemoryReclaimIdx);
                     InitSwitch(ClearBettryWhllelistSwitch, ClearBettryWhllelistIdx);
                     InitSwitch(unFreezerTemporarSwitch, unFreezerTemporarIdx);
-
+                    InitSwitch(breakNetWorkSwitch, breakNetWorkIdx);
 
                     InitSwitch(lmkSwitch, lmkIdx);
                     InitSwitch(dozeSwitch, dozeIdx);
@@ -350,6 +353,11 @@ public class Settings extends AppCompatActivity implements View.OnClickListener 
             Utils.textDialog(this, R.string.ClearBettryWhllelist_title, R.string.ClearBettryWhllelist_tips);
         } else if (id == R.id.unFreezerTemporar_title) {
             Utils.textDialog(this, R.string.unFreezerTemporary_title, R.string.unFreezerTemporary_tips);
+        } else if (id == R.id.breakNetWork_title) {
+            Utils.textDialog(this, R.string.breakNetWork_title, R.string.breakNetWork_tips);
+
+
+
         } else if (id == R.id.lmk_title) {
             Utils.textDialog(this, R.string.lmk_title, R.string.lmk_tips);
         } else if (id == R.id.doze_title) {

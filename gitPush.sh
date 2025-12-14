@@ -1,10 +1,7 @@
-#!/usr/bin/env bash
+x#!/usr/bin/env bash
 
-if [ $# == 0 ];then
-    echo "Usage: ./gitPush.sh message"
-    exit 1
-fi
-
-git add -A
-git commit -m "$*"
-git push
+echo -n "请输入您的上传日志:"
+read updateLog
+git add *
+git commit -m "$updateLog"
+git push -u origin main

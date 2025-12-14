@@ -12,7 +12,7 @@ import io.github.MoWei.Frozen.hook.XpUtils;
 import android.os.IBinder;
 
 public class PendingIntentHook extends MethodHook {
-    final private static String TAG = "后台意图";
+    final private static String TAG = "[后台意图]";
     private final Config config;
 
     public PendingIntentHook(Config config, ClassLoader classLoader) {
@@ -76,7 +76,7 @@ public class PendingIntentHook extends MethodHook {
     }
     @Override
     public String successLog() {
-        return "获取后台意图成功";
+        return TAG + " 获取后台意图成功";
     }
 
     public int getMinVersion() {

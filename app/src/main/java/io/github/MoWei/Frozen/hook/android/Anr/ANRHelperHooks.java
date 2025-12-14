@@ -10,6 +10,7 @@ import io.github.MoWei.Frozen.hook.Enum;
 import io.github.MoWei.Frozen.hook.XpUtils;
 
 public class ANRHelperHooks {
+    final private static String TAG = "[ANR]";
     public final Integer findIndex(Class<?>[] parameterTypes, String clazz) {
         for (int i = 0; i < parameterTypes.length; i++)
             if (clazz.equals(parameterTypes[i].getName()))
@@ -44,7 +45,7 @@ public class ANRHelperHooks {
                                         return;
                                     param.setResult(null);
                                     if (XpUtils.DEBUG_ANR)
-                                        XpUtils.log("Frozen[AnrHook]:", "跳过 ANR:" + XpUtils.getString(app, Enum.Field.processName));
+                                        XpUtils.log(TAG, "跳过 ANR:" + XpUtils.getString(app, Enum.Field.processName));
                                 }
                             });
                         }
@@ -60,7 +61,7 @@ public class ANRHelperHooks {
                                     return;
                                 param.setResult(null);
                                 if (XpUtils.DEBUG_ANR)
-                                    XpUtils.log("Frozen[AnrHook]:", "跳过 ANR:" + XpUtils.getString(record, Enum.Field.processName));
+                                    XpUtils.log(TAG, "跳过 ANR:" + XpUtils.getString(record, Enum.Field.processName));
                             }
                         });
                     }
@@ -68,9 +69,9 @@ public class ANRHelperHooks {
             }
 
             if (XpUtils.DEBUG_ANR)
-                XpUtils.log("Frozen[Hook]:", "拦截应用无响应");
+                XpUtils.log(TAG + "拦截应用无响应");
         } catch (Throwable throwable) {
-            XpUtils.log("Frozen[Hook]:", throwable.getMessage());
+            XpUtils.log(TAG, throwable.getMessage());
         }
     }
 }

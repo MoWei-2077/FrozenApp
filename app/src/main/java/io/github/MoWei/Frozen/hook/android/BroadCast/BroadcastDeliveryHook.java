@@ -12,7 +12,7 @@ import io.github.MoWei.Frozen.hook.android.Utils.SystemChecker;
 import io.github.MoWei.Frozen.hook.android.virtuals.BroadcastRecord;
 
 public class BroadcastDeliveryHook extends MethodHook {
-    final private String TAG = "广播";
+    final private String TAG = "[广播]";
     Config config;
     public BroadcastDeliveryHook(Config config, ClassLoader classLoader) {
         super(classLoader);
@@ -73,7 +73,7 @@ public class BroadcastDeliveryHook extends MethodHook {
 
     @Override
     public String successLog() {
-        return "初始化静态广播已成功";
+        return TAG + " 初始化静态广播已成功";
     }
     @Override
     public int getMinVersion() {

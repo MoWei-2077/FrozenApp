@@ -13,8 +13,8 @@ import io.github.MoWei.Frozen.hook.XpUtils.VectorSet;
 import java.util.HashSet;
 import java.util.Set;
 public class Config {
-
-    public static Set<Integer> playingUid = new HashSet<>(); // 正在播放音频的应用
+    public final static HashMap<Integer, Set<Integer>> playingUid = new HashMap<>(512); // 正在播放音频的应用
+    public static Set<Integer> AudioFocusUid = new HashSet<>(); // 正在焦点音频的应用
     public static Set<Integer> IntentUid = new HashSet<>(); // 正在广播推送 后台意图 音频意图的应用
     public int[] settings = new int[256];
     public BucketSet managedApp = new BucketSet();// 受Frozen管控的应用 只含冻结配置和杀死后台 不含自由后台
@@ -22,6 +22,7 @@ public class Config {
     public VectorSet foregroundUid = new VectorSet(64); // 当前在前台(含宽松前台) 底层进程问询时才刷新
     public VectorSet pendingUid = new VectorSet(64);    // 切到后台暂未冻结的应用
     public HashMap<String, Integer> uidIndex = new HashMap<>(512); // UID索引
+
     public HashMap<Integer, String> pkgIndex = new HashMap<>(512); // 包名索引
 
     Field processRecordUidField,
